@@ -66,6 +66,7 @@ var igv = (function (igv) {
                 queryEnd = Math.ceil(bpEnd),
                 queryURL = this.url + "?chromosome=" + queryChr + "&start=" + queryStart + "&end=" + queryEnd +
                     "&tissueName=" + this.tissueName;
+                queryBpath = "../dev_data/singleTissueEqtlByLocation_orig.json"
 
             return new Promise(function (fulfill, reject) {
 

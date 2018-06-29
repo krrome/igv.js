@@ -53,6 +53,12 @@ var igv = (function (igv) {
             else {
                 this.reader = new igv.GtexFileReader(config);
             }
+        } else if (config.sourceType === "bloodeqtl") {
+            this.reader = new igv.BloodEqtlReader(config);
+            this.queryable = true;
+        } else if (config.sourceType === "bloodsignaleqtl") {
+            this.reader = new igv.BloodSignalEqtlReader(config);
+            this.queryable = true;
         } else if (config.sourceType === "bigquery") {
             this.reader = new igv.BigQueryFeatureReader(config);
             this.queryable = true;

@@ -113,6 +113,14 @@ var igv = (function (igv) {
                 return new igv.EqtlTrack(config);
                 break;
 
+            case "bloodeqtl":
+                return new igv.BloodEqtlTrack(config);
+                break;
+
+            case "bloodsignaleqtl":
+                return new igv.BloodSignalEqtlTrack(config);
+                break;
+
             case "seg":
                 return new igv.SegTrack(config);
                 break;

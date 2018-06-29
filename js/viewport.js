@@ -682,7 +682,11 @@ var igv = (function (igv) {
             nameValueArray.forEach(function (nameValue) {
 
                 if (nameValue.name) {
-                    markup += "<tr><td class=\"igv-popover-td\">" + "<div class=\"igv-popover-name-value\">" + "<span class=\"igv-popover-name\">" + nameValue.name + "</span>" + "<span class=\"igv-popover-value\">" + nameValue.value + "</span>" + "</div>" + "</td></tr>";
+                    if (nameValue.href) {
+                        markup += "<tr><td class=\"igv-popover-td\">" + "<div class=\"igv-popover-name-value\">" + "<span class=\"igv-popover-name\">" + nameValue.name + "</span>" + "<span class=\"igv-popover-value\"><div onclick=\"" + nameValue.href + "\">" + nameValue.value + "</div></span>" + "</div>" + "</td></tr>";
+                    }else {
+                        markup += "<tr><td class=\"igv-popover-td\">" + "<div class=\"igv-popover-name-value\">" + "<span class=\"igv-popover-name\">" + nameValue.name + "</span>" + "<span class=\"igv-popover-value\">" + nameValue.value + "</span>" + "</div>" + "</td></tr>";
+                    }
                 } else {
                     // not a name/value pair
                     markup += "<tr><td>" + nameValue.toString() + "</td></tr>";
