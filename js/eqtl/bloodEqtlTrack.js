@@ -288,7 +288,7 @@ var igv = (function (igv) {
                             {name: "p value", value: feature.pValue},
                             {name: "effect size", value: feature.beta},
                             {name: "probe id", value: feature.probeId},
-                            {name: "detailed", value: "Load details", href: "igv.browser.loadTrack({type: 'bloodsignaleqtl', sourceType: 'bloodsignaleqtl', url: 'http://127.0.0.1:5002/', queryVarId:'"+feature.variantId+"', dataset:'"+feature.dataset+"', queryProbeId:'"+feature.probeId+"', fwdIter:'"+feature.fwdIter+"', name: '" + detailsTrackName +"'})"},
+                            {name: "detailed", value: "Load details", href: "igv.browser.loadTrack({type: 'bloodsignaleqtl', sourceType: 'bloodsignaleqtl', url: '"+igv_eqtl_baseurl+"/', queryVarId:'"+feature.variantId+"', dataset:'"+feature.dataset+"', queryProbeId:'"+feature.probeId+"', fwdIter:'"+feature.fwdIter+"', name: '" + detailsTrackName +"'})"},
                             );
 
                     }
