@@ -50,6 +50,8 @@ var igv = (function (igv) {
         this.config = config;
         this.url = url;
         this.name = label;
+        this.dataset = config.dataset || "merged";
+        this.cellType = config.cellType;
         this.pValueField = config.pValueField || "pValue";
         this.geneField = config.geneField || "geneSymbol";
         this.snpField = config.snpField || "snp";
@@ -62,12 +64,13 @@ var igv = (function (igv) {
         this.background = config.background;    // No default
         this.divider = config.divider || "rgb(225,225,225)";
         this.dotSize = config.dotSize || 2;
-        this.height = config.height || 100;
+        this.height = config.height || 200;
         this.autoHeight = false;
         this.disableButtons = config.disableButtons;
         this.visibilityWindow = config.visibilityWindow;
 
         this.featureSource = new igv.FeatureSource(config);
+        this.loadedFeatures = undefined;
 
     };
 
@@ -119,7 +122,8 @@ var igv = (function (igv) {
     };
 
     igv.BloodSignalEqtlTrack.prototype.getFeatures = function (chr, bpStart, bpEnd) {
-        return this.featureSource.getFeatures(chr, bpStart, bpEnd);
+        if (! this.loadedFeatures){ this.loadedFeatures = this.featureSource.getFeatures(chr, bpStart, bpEnd);};
+        return this.loadedFeatures;
     };
 
     igv.BloodSignalEqtlTrack.prototype.draw = function (options) {
@@ -134,6 +138,10 @@ var igv = (function (igv) {
             bpEnd = bpStart + pixelWidth * bpPerPixel + 1,
             yScale = (self.maxLogP - self.minLogP) / pixelHeight,
             selection = options.genomicState.selection;
+
+        // We have to subset to the correct positions & chromosome because that is not done automagtically in featureSorces when the reader has no_subsetting = true;
+        featureCache = new igv.FeatureCache(featureList)
+        featureList = featureCache.queryFeatures(options.referenceFrame.chrName, bpStart, bpEnd);
 
         /*
         // make sure that only eQTLs are plotted that belong to the given dataset.
@@ -154,7 +162,7 @@ var igv = (function (igv) {
             
             ctx.save();
             
-            self.maxLogP = autoscale(featureList, bpStart, bpEnd);
+            self.maxLogP = autoscale(featureList, bpStart, bpEnd)*1.1;
             yScale = (self.maxLogP - self.minLogP) / pixelHeight;
             
             // Draw in two passes, with "selected" eqtls drawn last
@@ -193,6 +201,7 @@ var igv = (function (igv) {
                 snp,
                 geneName,
                 capped;
+            var lead_diamond_size = 4;
 
             for (i = 0; i < len; i++) {
 
@@ -207,8 +216,8 @@ var igv = (function (igv) {
                 if (px < 0) continue;
                 else if (px > pixelWidth) break;
 
-
-                snp = eqtl.snp.toUpperCase();
+                snp = eqtl.variantId;
+                if (eqtl.snp != null) snp = eqtl.snp.toUpperCase();
                 geneName = eqtl[self.geneField].toUpperCase();
 
                 isSelected = selection &&
@@ -251,13 +260,25 @@ var igv = (function (igv) {
                             igv.graphics.setProperties(ctx, {fillStyle: color, strokeStyle: color});
                         }
 
-                        igv.graphics.fillCircle(ctx, px, py, radius);
-                        igv.graphics.strokeCircle(ctx, px, py, radius);
+                        if (isLead) {
+                            ds = lead_diamond_size;
+                            x_pos = [px-ds, px, px+ds, px, px-ds];
+                            y_pos = [py, py-(ds*2), py, py+(ds*2), py];
+                            igv.graphics.fillPolygon(ctx,x_pos,y_pos );
+                            igv.graphics.strokePolygon(ctx,x_pos,y_pos, {strokeStyle: "black"});
+                        } else {
+                            igv.graphics.fillCircle(ctx, px, py, radius);
+                            igv.graphics.strokeCircle(ctx, px, py, radius);
+                        }
                     }
                 }
             }
         }
 
+    };
+
+    igv.BloodSignalEqtlTrack.prototype.menuItemList = function () {
+        return [];
     };
 
     /**
@@ -294,12 +315,14 @@ var igv = (function (igv) {
                         }
 
                         popupData.push(
+                            {name: "cell type", value: feature.cellType},
                             {name: "gene hgnc", value: feature.geneSymbol},
                             {name: "variant id", value: feature.variantId},
                             {name: "rs-id", value: feature.snp},
                             {name: "p value", value: feature.pValue},
                             {name: "effect size", value: feature.beta},
                             {name: "probe id", value: feature.probeId},
+                            {name: "ld with lead", value: feature.ld}
                             );
 
                     }

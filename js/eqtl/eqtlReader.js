@@ -63,10 +63,17 @@ var igv = (function (igv) {
             var self=this,
                 queryChr = chr.startsWith("chr") ? chr.substr(3) : chr,
                 queryStart = Math.floor(bpStart),
-                queryEnd = Math.ceil(bpEnd),
+                queryEnd = Math.ceil(bpEnd);
                 //TODO: enable querying the high-detail variant only if the region is within 1.5MB of the specified variant.
-                queryURL = this.url + "eqtl/" + this.dataset + "/" + queryChr + "/" + queryStart + "/" + queryEnd;
-
+                //queryURL = this.url + "eqtl/" + this.dataset + "/" + queryChr + "/" + queryStart + "/" + queryEnd;
+            
+            
+            if ((self.config.cellType) && (self.config.cellType != '')) {
+                var queryURL = this.url + "eqtl?dataset=" + this.dataset + "&cellType=" + self.config.cellType + "&chromosome=" + queryChr + "&start=" + queryStart + "&end=" + queryEnd;
+            } else {
+                var queryURL = this.url + "eqtl?dataset=" + this.dataset + "&chromosome=" + queryChr + "&start=" + queryStart + "&end=" + queryEnd;
+            }
+            
             return new Promise(function (fulfill, reject) {
 
                 igv.xhr.loadJson(queryURL, {
@@ -101,24 +108,31 @@ var igv = (function (igv) {
                             var eqtls = [];
 
                             //TODO: keep the structure with cell type and also return the high-detail eQTL results!
+
                             for (dataset in json.lead_eqtl){
-                                ds = json.lead_eqtl[dataset]
-                                ds_eqtls = []
-                                for (i =0; i < ds.chromosome.length; i++){
-                                    var eqtl = {};
-                                    eqtl.chr = "chr" + ds.chromosome[i];
-                                    eqtl.position = ds.start[i];
-                                    eqtl.start = ds.start[i]-1;
-                                    eqtl.end = ds.start[i];
-                                    eqtl.snp = ds.snpId[i];
-                                    eqtl.variantId = ds.variantId[i];
-                                    eqtl.fwdIter = ds.fwdIter[i];
-                                    eqtl.geneSymbol = ds.geneSymbol[i];
-                                    eqtl.beta = ds.beta[i];
-                                    eqtl.probeId = ds.probeId[i];
-                                    eqtl.pValue = ds.pValue[i];
-                                    eqtl.dataset = dataset
-                                    eqtls.push(eqtl);
+                                for (cell_type in json.lead_eqtl[dataset]){
+                                    ds = json.lead_eqtl[dataset][cell_type];
+                                    for (i =0; i < ds.chromosome.length; i++){
+                                        var eqtl = {};
+                                        eqtl.chr = "chr" + ds.chromosome[i];
+                                        eqtl.position = ds.start[i];
+                                        eqtl.start = ds.start[i]-1;
+                                        eqtl.end = ds.start[i];
+                                        eqtl.snp = ds.snpId[i];
+                                        eqtl.variantId = ds.variantId[i];
+                                        eqtl.fwdIter = ds.fwdIter[i];
+                                        eqtl.geneSymbol = ds.geneSymbol[i];
+                                        eqtl.beta = ds.beta[i];
+                                        eqtl.probeId = ds.probeId[i];
+                                        eqtl.pValue = ds.pValue[i];
+                                        eqtl.dataset = dataset;
+                                        eqtl.cellType = ds.cellType[i];
+                                        eqtl.id = ds.id[i];
+                                        if (eqtl.pValue == 0) {
+                                            eqtl.pValue = 1e-300;
+                                        }
+                                        eqtls.push(eqtl);
+                                    }
                                 }
                             }
 

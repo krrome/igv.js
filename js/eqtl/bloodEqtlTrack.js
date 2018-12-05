@@ -50,6 +50,7 @@ var igv = (function (igv) {
         this.config = config;
         this.url = url;
         this.name = label;
+        this.dataset = config.dataset || "merged";
         this.pValueField = config.pValueField || "pValue";
         this.geneField = config.geneField || "geneSymbol";
         this.snpField = config.snpField || "snp";
@@ -246,6 +247,10 @@ var igv = (function (igv) {
 
     };
 
+    igv.BloodEqtlTrack.prototype.menuItemList = function () {
+        return [];
+    };
+
     /**
      * Return "popup data" for feature @ genomic location.  Data is an array of key-value pairs
      */
@@ -282,13 +287,14 @@ var igv = (function (igv) {
                         detailsTrackName = feature.dataset + " eQTL " + feature.geneSymbol + " (" + feature.probeId + ") with var " + feature.variantId + " ("+feature.fwdIter+")";
 
                         popupData.push(
+                            {name: "cell type", value: feature.cellType},
                             {name: "gene hgnc", value: feature.geneSymbol},
                             {name: "variant id", value: feature.variantId},
                             {name: "rs-id", value: feature.snp},
                             {name: "p value", value: feature.pValue},
                             {name: "effect size", value: feature.beta},
                             {name: "probe id", value: feature.probeId},
-                            {name: "detailed", value: "Load details", href: "igv.browser.loadTrack({type: 'bloodsignaleqtl', sourceType: 'bloodsignaleqtl', url: 'http://127.0.0.1:5002/', queryVarId:'"+feature.variantId+"', dataset:'"+feature.dataset+"', queryProbeId:'"+feature.probeId+"', fwdIter:'"+feature.fwdIter+"', name: '" + detailsTrackName +"'})"},
+                            {name: "detailed", value: "Load details", href: "create_track_by_id('"+feature.id+"', hgnc='"+feature.geneSymbol+"')"}
                             );
 
                     }

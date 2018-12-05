@@ -377,6 +377,15 @@ var igv = (function (igv) {
         if (this.scrollbar) {
             this.scrollbar.update();
         }
+
+        /// try to resize the iframe if possible
+        try {
+            window.parent.resizeIgv();
+        }
+        catch(err) {
+            
+        }
+
     }
 
     igv.TrackView.prototype.isLoading = function () {
