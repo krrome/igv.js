@@ -53,7 +53,8 @@ var igv = (function (igv) {
             "tdf",
             "refgene",
             "genepred",
-            "genepredext"
+            "genepredext",
+            "signal"
         ];
 
     igv.knownFileExtensions = new Set(list);
@@ -117,9 +118,11 @@ var igv = (function (igv) {
                 return new igv.BloodEqtlTrack(config);
                 break;
 
+            case "signal":
             case "bloodsignaleqtl":
                 return new igv.BloodSignalEqtlTrack(config);
                 break;
+
 
             case "seg":
                 return new igv.SegTrack(config);
@@ -207,6 +210,9 @@ var igv = (function (igv) {
                         break;
                     case "bam":
                         config.type = "alignment";
+                        break;
+                    case "signal":
+                        config.type = "signal";
                         break;
                     default:
                         config.type = "annotation";

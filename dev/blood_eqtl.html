@@ -181,7 +181,7 @@
     <div onclick="igv.browser.loadTrack({
                          type: 'bloodsignaleqtl',
                          sourceType: 'bloodsignaleqtl',
-                         url: 'http://127.0.0.1:5002/',
+                         url: 'http://127.0.0.1:8089/',
                          queryVarId:'1:247611514:T:C',
                          queryProbeId:'1010035',
                          fwdIter:'0',
@@ -201,6 +201,7 @@
         var div,
                 options,
                 browser;
+        igv_eqtl_baseurl = 'http://127.0.0.1:8089/';
 
         div = $("#myDiv")[0];
         options = {
@@ -240,7 +241,7 @@
                 {
                      type: 'bloodeqtl',
                      sourceType: 'bloodeqtl',
-                     url: 'http://127.0.0.1:5002/',
+                     url: igv_eqtl_baseurl,
                      dataset: 'CD14',
                      name: 'CD14 blood eQTL data',
                 },
@@ -259,6 +260,7 @@
         };
 
         browser = igv.createBrowser(div, options);
+
 
 
         // igv.browser.search("psphp1");

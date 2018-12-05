@@ -58,7 +58,10 @@ var igv = (function (igv) {
             this.queryable = true;
         } else if (config.sourceType === "bloodsignaleqtl") {
             this.reader = new igv.BloodSignalEqtlReader(config);
-            this.queryable = true;
+            this.queryable = false;
+        } else if ((config.sourceType === "file") && (config.format === "signal")) {
+            this.reader = new igv.BloodSignalEqtlReader(config);
+            this.queryable = false;
         } else if (config.sourceType === "bigquery") {
             this.reader = new igv.BigQueryFeatureReader(config);
             this.queryable = true;
@@ -215,7 +218,12 @@ var igv = (function (igv) {
                                 addFeaturesToDB(featureList);
                             }
 
-                            return self.featureCache.queryFeatures(queryChr, bpStart, bpEnd);
+                            if (! self.reader.no_subsetting){
+                                // this is an unsafe operation if the track doesn't skip entries from a different chromosome
+                                featureList = self.featureCache.queryFeatures(queryChr, bpStart, bpEnd);
+                            }
+
+                            return featureList;
                         }
                         else {
                             return undefined;

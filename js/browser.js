@@ -616,6 +616,16 @@ var igv = (function (igv) {
             trackView.updateViews();
         }
 
+        /// try to resize the iframe if possible
+        try {
+            window.parent.resizeIgv();
+        }
+        catch(err) {
+            
+        }
+
+        this.fireEvent('trackadded', [track]);
+
     };
 
     igv.Browser.prototype.reorderTracks = function () {
@@ -664,6 +674,14 @@ var igv = (function (igv) {
             this.trackViews.splice(i, 1);
             this.trackContainerDiv.removeChild(trackPanelRemoved.trackDiv);
             this.fireEvent('trackremoved', [trackPanelRemoved.track]);
+        }
+
+        /// try to resize the iframe if possible
+        try {
+            window.parent.resizeIgv();
+        }
+        catch(err) {
+            
         }
 
     };
@@ -777,6 +795,14 @@ var igv = (function (igv) {
         this.trackViews.forEach(function (trackView) {
             trackView.setTrackHeight(newHeight);
         });
+
+        /// try to resize the iframe if possible
+        try {
+            window.parent.resizeIgv();
+        }
+        catch(err) {
+            
+        }
 
     };
 
@@ -902,6 +928,14 @@ var igv = (function (igv) {
         otherTracks.forEach(function (trackView) {
             trackView.updateViews();
         })
+
+        /// try to resize the iframe if possible
+        try {
+            window.parent.resizeIgv();
+        }
+        catch(err) {
+            
+        }
     };
 
 
