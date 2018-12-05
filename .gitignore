@@ -5,6 +5,6 @@
 /node_modules
 /.idea/codeStyles/codeStyleConfig.xml
 /.idea/codeStyles/Project.xml
-/dist/
+#/dist/
 /.idea/libraries/igv_js_node_modules.xml
 /tmp/
