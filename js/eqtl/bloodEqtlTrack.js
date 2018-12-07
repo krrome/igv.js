@@ -234,7 +234,7 @@ var igv = (function (igv) {
                             color = selection.colorForGene(geneName);
                             igv.graphics.setProperties(ctx, {fillStyle: color, strokeStyle: "black"});
                         } else {
-                            color = capped ? "rgb(150, 150, 150)" : "rgb(180, 180, 180)";
+                            color = capped ? "rgb(10, 10, 10)" : "rgb(60, 60, 60)";
                             igv.graphics.setProperties(ctx, {fillStyle: color, strokeStyle: color});
                         }
 

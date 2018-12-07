@@ -344,10 +344,15 @@ var igv = (function (igv) {
         track.name = label;
         track.config.name = label;
 
+
         $label.empty();
         $label.html(track.name);
         txt = $label.text();
         $label.attr('title', txt);
+        if (track.config.labelFormatter){
+            // add possibility to edit the label format. The element is a div.
+            track.config.labelFormatter($label, track);
+        }
     };
 
     igv.getTrackLabelText = function (track) {
