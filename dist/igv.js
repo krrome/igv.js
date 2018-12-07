@@ -32349,7 +32349,7 @@ var igv = (function (igv) {
                             color = selection.colorForGene(geneName);
                             igv.graphics.setProperties(ctx, {fillStyle: color, strokeStyle: "black"});
                         } else {
-                            color = capped ? "rgb(150, 150, 150)" : "rgb(180, 180, 180)";
+                            color = capped ? "rgb(10, 10, 10)" : "rgb(60, 60, 60)";
                             igv.graphics.setProperties(ctx, {fillStyle: color, strokeStyle: color});
                         }
 
@@ -32655,12 +32655,12 @@ var igv = (function (igv) {
 
         igv.BloodSignalEqtlReader.prototype.decode_signal_file = function(tokens) {
             var header = this.header;
-            var columns = header.columns
-            get_data_item = function(key, default_val=null){
+            var columns = header.columns;
+            get_data_item = function(key){
                 if (key in columns){
                     return tokens[columns[key]];
                 } else {
-                    return default_val;
+                    return null;
                 }  
             }
             var eqtl = {};
@@ -51721,10 +51721,15 @@ var igv = (function (igv) {
         track.name = label;
         track.config.name = label;
 
+
         $label.empty();
         $label.html(track.name);
         txt = $label.text();
         $label.attr('title', txt);
+        if (track.config.labelFormatter){
+            // add possibility to edit the label format. The element is a div.
+            track.config.labelFormatter($label, track);
+        }
     };
 
     igv.getTrackLabelText = function (track) {

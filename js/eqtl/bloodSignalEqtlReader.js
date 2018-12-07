@@ -229,12 +229,12 @@ var igv = (function (igv) {
 
         igv.BloodSignalEqtlReader.prototype.decode_signal_file = function(tokens) {
             var header = this.header;
-            var columns = header.columns
-            get_data_item = function(key, default_val=null){
+            var columns = header.columns;
+            get_data_item = function(key){
                 if (key in columns){
                     return tokens[columns[key]];
                 } else {
-                    return default_val;
+                    return null;
                 }  
             }
             var eqtl = {};
