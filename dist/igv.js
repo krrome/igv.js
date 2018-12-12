@@ -33067,7 +33067,7 @@ var igv = (function (igv) {
         }
     }
 
-    locuszoom_colors = ["rgb(255, 0,0)", "rgb(255, 165,0)", "rgb(255, 165,0)", "rgb(135, 206,250)", "rgb(0, 0,128)"];
+    locuszoom_colors = ["rgb(255, 0,0)", "rgb(255, 165,0)", "rgb(0, 255,0)", "rgb(135, 206,250)", "rgb(0, 0,128)"];
     locuszoom_lead_color = "rgb(125, 38,205)";
     
 
